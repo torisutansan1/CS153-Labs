@@ -89,3 +89,46 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+int
+sys_getparents(void)
+{
+	return getparents();
+}
+
+int
+sys_exitTest(void)
+{
+  int n;
+
+  if (argint(0, &n) < 0) { return -1; }
+
+  exitTest(n);
+  return 0;
+}
+
+int
+sys_waitTest(void)
+{
+  int* fd;
+
+  if (argptr(0, (void*)&fd, 2*sizeof(fd[0])) < 0) { return -1; }
+
+  waitTest(fd);
+  
+  return 0;
+}
+
+int
+sys_waitpid(void)
+{
+  int n;
+  int options;
+  int* fd;
+
+  if (argint(0, &n) < 0) { return -1; }
+  if (argint(2, &options) < 0) { return -1; }
+  if (argptr(1, (void*)&fd, 2*sizeof(fd[0])) < 0) { return -1; }
+
+  return waitpid(n, fd, 0);
+}
