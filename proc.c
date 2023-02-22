@@ -331,10 +331,15 @@ scheduler(void)
     sti();
 
     // Loop over process table looking for process to run.
+    int low = 31;
     acquire(&ptable.lock);
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
-        continue;
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+    {
+      if (p->state == RUNNABLE && p->prior_val < low)
+      {
+        low = p->prior_val;
+      }
+    }
 
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
@@ -351,8 +356,6 @@ scheduler(void)
       c->proc = 0;
     }
     release(&ptable.lock);
-
-  }
 }
 
 // Enter scheduler.  Must hold only ptable.lock
@@ -697,5 +700,8 @@ waitpid(int pid, int* node, int options)
 int
 setpriority(int prior_val)
 {
+  struct proc* curproc = myproc();
+  curproc->prior_val = prior_val;
+  yield();
   return 0;
 }
