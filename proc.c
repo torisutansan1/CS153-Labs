@@ -726,8 +726,7 @@ setpriority(int prior_val)
   struct proc* curproc = myproc();
   curproc->prior_val = prior_val;
   yield();
-<<<<<<< HEAD
-  return 0;
+  return curproc->prior_val;
 }
 
 // void
@@ -776,7 +775,3 @@ setpriority(int prior_val)
 
 //   }
 // }
-=======
-  return curproc->prior_val;
-}
->>>>>>> 3f27ef9697152bae25b37908cd9b349b8e09575e
