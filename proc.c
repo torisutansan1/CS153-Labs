@@ -319,6 +319,7 @@ wait(void)
 //  - swtch to start running that process
 //  - eventually that process transfers control
 //      via swtch back to the scheduler.
+
 void
 scheduler(void)
 {
@@ -332,11 +333,11 @@ scheduler(void)
     sti();
 
     // Loop over process table looking for process to run.
-    int high = 31;
+    int high = 31; // Lowest priority
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
     {
-      if (p->state == RUNNABLE && p->prior_val < high)
+      if (p->prior_val < high && p->state == RUNNABLE)
       {
         high = p->prior_val;
       }
@@ -713,5 +714,5 @@ setpriority(int prior_val)
   struct proc* curproc = myproc();
   curproc->prior_val = prior_val;
   yield();
-  return 0;
+  return curproc->prior_val;
 }
