@@ -24,3 +24,4 @@
 #define SYS_exitTest 23
 #define SYS_waitTest 24
 #define SYS_waitpid 25
+#define SYS_setpriority 26

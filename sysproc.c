@@ -93,7 +93,7 @@ sys_uptime(void)
 int
 sys_getparents(void)
 {
-	return getparents();
+  return getparents();
 }
 
 int
@@ -131,4 +131,15 @@ sys_waitpid(void)
   if (argptr(1, (void*)&fd, 2*sizeof(fd[0])) < 0) { return -1; }
 
   return waitpid(n, fd, 0);
+}
+
+int
+sys_setpriority(void)
+{
+  int n;
+  if (argint(0, &n) < 0) { return -1; }
+
+  setpriority(n);
+
+  return 0;
 }

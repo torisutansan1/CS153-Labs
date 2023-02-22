@@ -124,6 +124,7 @@ int		getparents(void);
 void    exitTest(int);
 int     waitTest(int*);
 int     waitpid(int, int*, int);
+int     setpriority(int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

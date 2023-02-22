@@ -536,15 +536,15 @@ procdump(void)
 int
 getparents()
 {
-	struct proc *p = myproc();
-	while (p != initproc)
-	{
+  struct proc *p = myproc();
+  while (p != initproc)
+  {
     cprintf("%d\n", p->pid);
     p = p->parent;
-	}
+  }
   cprintf("%d\n", p->pid);
 
-	return 22;	
+  return 22;  
 }
 
 void
@@ -692,4 +692,10 @@ waitpid(int pid, int* node, int options)
     // Wait for children to exit.  (See wakeup1 call in proc_exit.)
     sleep(curproc, &ptable.lock);  //DOC: wait-sleep
   }
+}
+
+int
+setpriority(int prior_val)
+{
+  return 0;
 }
