@@ -332,36 +332,40 @@ scheduler(void)
     sti();
 
     // Loop over process table looking for process to run.
-    int high = 31;
+    int low = 31;
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
     {
-      if (p->state == RUNNABLE && p->prior_val < high)
+      if (p->state == RUNNABLE && p->prior_val < low)
       {
-        high = p->prior_val;
+        low = p->prior_val;
       }
     }
 
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
     {
-      if (p->state != RUNNABLE) { continue; } // Go back to the beginning of the for loop.
+      if (p->state == RUNNABLE && p->prior_val < low)
+      {
+        low = p->prior_val;
+      }
+    }
+
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+    {
+      if (p->state != RUNNABLE) { continue; }
 
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
+      c->proc = p;
+      switchuvm(p);
+      p->state = RUNNING;
 
-      if (p->prior_val == high)
-      {
-        c->proc = p;
-        switchuvm(p);
-        p->state = RUNNING;
+      swtch(&(c->scheduler), p->context);
+      switchkvm();
 
-        swtch(&(c->scheduler), p->context);
-        switchkvm();
-
-        // Process is done running for now.
-        // It should have changed its p->state before coming back.
-      }
+      // Process is done running for now.
+      // It should have changed its p->state before coming back.
       c->proc = 0;
     }
     release(&ptable.lock);
@@ -714,4 +718,49 @@ setpriority(int prior_val)
   curproc->prior_val = prior_val;
   yield();
   return 0;
+}
+
+void
+lotteryscheduler(void)
+{
+  struct proc *p;
+  struct cpu *c = mycpu();
+  c->proc = 0;
+  
+  for(;;){
+    // Enable interrupts on this processor.
+    sti();
+    // create a random ticket
+    int randTicket;
+    // Loop over process table looking for process to run.
+    acquire(&ptable.lock);
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      bool nTicket = false;
+      for(int i = 0; i < p->ticket.size(); i++){
+        if(p->ticket[i] == randTicket){
+          nTicket = true;
+        }
+      }
+      if(!nTicket)
+        continue;
+      if(p->state != RUNNABLE)
+        continue;
+
+      // Switch to chosen process.  It is the process's job
+      // to release ptable.lock and then reacquire it
+      // before jumping back to us.
+      c->proc = p;
+      switchuvm(p);
+      p->state = RUNNING;
+
+      swtch(&(c->scheduler), p->context);
+      switchkvm();
+
+      // Process is done running for now.
+      // It should have changed its p->state before coming back.
+      c->proc = 0;
+    }
+    release(&ptable.lock);
+
+  }
 }
