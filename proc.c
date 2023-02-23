@@ -6,7 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
-#include <stdlib.h>
+//#include <stdlib.h>
 
 struct {
   struct spinlock lock;
@@ -356,15 +356,15 @@ scheduler(void)
       // before jumping back to us.
       if (p->prior_val != high) { continue; }
 
-        c->proc = p;
-        switchuvm(p);
-        p->state = RUNNING;
+      c->proc = p;
+      switchuvm(p);
+      p->state = RUNNING;
 
-        swtch(&(c->scheduler), p->context);
-        switchkvm();
+      swtch(&(c->scheduler), p->context);
+      switchkvm();
 
-        // Process is done running for now.
-        // It should have changed its p->state before coming back.
+      // Process is done running for now.
+      // It should have changed its p->state before coming back.
       c->proc = 0;
     }
     release(&ptable.lock);
@@ -718,6 +718,7 @@ setpriority(int prior_val)
   p->prior_val = prior_val;
   return curproc->prior_val;
 }
+
 // int
 // maxTickets(){
 //   int maxTicket;
@@ -729,6 +730,7 @@ setpriority(int prior_val)
 //   }
 //   return maxTicket;
 // }
+
 // void
 // lotteryscheduler(void)
 // {
