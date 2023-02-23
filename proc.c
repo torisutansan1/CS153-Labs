@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include <stdlib.h>
 
 struct {
   struct spinlock lock;
@@ -717,19 +718,29 @@ setpriority(int prior_val)
 
   return curproc->prior_val;
 }
-
+int
+maxTickets(){
+  int maxTicket;
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p != RUNNABLE){
+        continue;
+      }
+      maxTicket += p->ticket;
+  }
+  return maxTicket;
+}
 // void
 // lotteryscheduler(void)
 // {
 //   struct proc *p;
 //   struct cpu *c = mycpu();
 //   c->proc = 0;
-  
+//   srand(tima(null));
 //   for(;;){
 //     // Enable interrupts on this processor.
 //     sti();
 //     // create a random ticket
-//     int randTicket;
+//     int randTicket = rand() % maxTickets();
 //     // Loop over process table looking for process to run.
 //     acquire(&ptable.lock);
 //     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
