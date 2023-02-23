@@ -339,7 +339,7 @@ scheduler(void)
     {
       if (p->prior_val < high && p->state == RUNNABLE)
       {
-        low = p->prior_val;
+        high = p->prior_val;
       }
     }
 
@@ -347,7 +347,7 @@ scheduler(void)
     {
       if (p->state == RUNNABLE && p->prior_val < low)
       {
-        low = p->prior_val;
+        high = p->prior_val;
       }
     }
 
