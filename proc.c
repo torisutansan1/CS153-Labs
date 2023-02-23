@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include <stdlib.h>
 
 struct {
   struct spinlock lock;
@@ -717,19 +718,29 @@ setpriority(int prior_val)
   p->prior_val = prior_val;
   return curproc->prior_val;
 }
-
+int
+maxTickets(){
+  int maxTicket;
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p != RUNNABLE){
+        continue;
+      }
+      maxTicket += p->ticket;
+  }
+  return maxTicket;
+}
 // void
 // lotteryscheduler(void)
 // {
 //   struct proc *p;
 //   struct cpu *c = mycpu();
 //   c->proc = 0;
-  
+//   srand(tima(null));
 //   for(;;){
 //     // Enable interrupts on this processor.
 //     sti();
 //     // create a random ticket
-//     int randTicket;
+//     int randTicket = rand() % maxTickets();
 //     // Loop over process table looking for process to run.
 //     acquire(&ptable.lock);
 //     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
@@ -766,21 +777,15 @@ setpriority(int prior_val)
 // }
 
 // void
-// priorityDonate(int pid1, int pid2){
-//   struct proc *p1 = initproc;
+// priorityDonate(int pid){
+//   struct proc *p1 = myproc();
 //   struct proc *p2 = initproc;
 //   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-//       if(p->pid == pid1){
+//       if(p->pid == pid){
 //          p1 = p;
 //       }
-//       else if(p->pid == pid2){
-//          p2 = p;
-//       }
-//       else{
-//         continue;
-//       }
 //   }
-//   if(p1 != initproc && p2 != initproc){
+//   if(p2 != initproc){
 //     int val = p1->prior_val;
 //     p1->prior_val = p2->prior_val;
 //     p2->prior_val = val;
