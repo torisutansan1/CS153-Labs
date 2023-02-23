@@ -718,17 +718,17 @@ setpriority(int prior_val)
   p->prior_val = prior_val;
   return curproc->prior_val;
 }
-int
-maxTickets(){
-  int maxTicket;
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p != RUNNABLE){
-        continue;
-      }
-      maxTicket += p->ticket;
-  }
-  return maxTicket;
-}
+// int
+// maxTickets(){
+//   int maxTicket;
+//   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+//       if(p != RUNNABLE){
+//         continue;
+//       }
+//       maxTicket += p->ticket;
+//   }
+//   return maxTicket;
+// }
 // void
 // lotteryscheduler(void)
 // {
