@@ -345,7 +345,7 @@ scheduler(void)
 
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
     {
-      if (p->state == RUNNABLE && p->prior_val < low)
+      if (p->state == RUNNABLE && p->prior_val < high)
       {
         high = p->prior_val;
       }
