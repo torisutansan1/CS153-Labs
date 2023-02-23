@@ -45,7 +45,7 @@ int PScheduler(void){
                      asm("nop"); 
                  }
             }
-                
+            
             printf(1, " - CHILD #%d WITH PRIORITY %d HAS FINISHED! \n\n", getpid(), 30 - 10 * i);		
             exitTest(getpid() + 4);
         } 

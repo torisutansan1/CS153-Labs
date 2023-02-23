@@ -341,15 +341,7 @@ scheduler(void)
       {
         high = p->prior_val;
       }
-    }
-
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-    {
-      if (p->state != RUNNABLE) { continue; } // Go back to the beginning of the for loop.
-
-      // Switch to chosen process.  It is the process's job
-      // to release ptable.lock and then reacquire it
-      // before jumping back to us.
+      else { continue; }
 
       if (p->prior_val == high)
       {
@@ -711,8 +703,9 @@ waitpid(int pid, int* node, int options)
 int
 setpriority(int prior_val)
 {
+  yield();
   struct proc* curproc = myproc();
   curproc->prior_val = prior_val;
-  yield();
+
   return curproc->prior_val;
 }
