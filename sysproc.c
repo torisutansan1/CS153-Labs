@@ -139,7 +139,5 @@ sys_setpriority(void)
   int n;
   if (argint(0, &n) < 0) { return -1; }
 
-  setpriority(n);
-
-  return 0;
+  return setpriority(n);
 }
