@@ -782,15 +782,16 @@ setpriority(int prior_val)
 // void
 // priorityDonate(int pid){
 //   struct proc *p1 = myproc();
-//   struct proc *p2 = initproc;
+//   struct proc *p2 = myproc();
 //   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
 //       if(p->pid == pid){
 //          p1 = p;
 //       }
 //   }
-//   if(p2 != initproc){
+//   if(p2 != myproc()){
 //     int val = p1->prior_val;
 //     p1->prior_val = p2->prior_val;
 //     p2->prior_val = val;
+//     yield();
 //   }
 // }
