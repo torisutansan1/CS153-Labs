@@ -802,17 +802,13 @@ lotteryscheduler(void)
 void
 priorityDonate(int pid){
   struct proc *p;
-  struct proc *p1 = myproc();
-  struct proc *p2 = myproc();
+  struct proc *curproc = myproc();
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->pid == pid){
-         p1 = p;
+      if(p->pid != pid){
+         continue;
       }
-  }
-  if(p2 != myproc()){
-    int val = p1->prior_val;
-    p1->prior_val = p2->prior_val;
-    p2->prior_val = val;
-    yield();
+      int val = curproc->prior_val;
+      curproc->prior_val = p->prior_val;
+      p->prior_val = val;
   }
 }
