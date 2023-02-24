@@ -354,7 +354,14 @@ scheduler(void)
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
-      if (p->prior_val != high) { continue; }
+      if (p->prior_val != high) 
+      { 
+        if (p->prior_val % 31 != 0)
+        {
+          p->prior_val--;
+        }
+        continue;  
+      }
 
       c->proc = p;
       switchuvm(p);
@@ -366,6 +373,7 @@ scheduler(void)
       // Process is done running for now.
       // It should have changed its p->state before coming back.
       c->proc = 0;
+      p->prior_val++;
     }
     release(&ptable.lock);
   }
@@ -713,9 +721,8 @@ waitpid(int pid, int* node, int options)
 int
 setpriority(int prior_val)
 {
-  struct proc* p = myproc();
   struct proc* curproc = myproc();
-  p->prior_val = prior_val;
+  curproc->prior_val = prior_val;
   return curproc->prior_val;
 }
 
