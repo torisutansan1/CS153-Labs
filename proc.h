@@ -52,7 +52,7 @@ struct proc {
   char name[16];               // Process name (debugging)
 
   int prior_val;               // Priority value [0 - 31], 0: highest, 31: lowest.
-  int tickets;            // ticket array
+  int ticket;            // ticket array
 };
 
 // Process memory is laid out contiguously, low addresses first:
