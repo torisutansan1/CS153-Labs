@@ -53,9 +53,6 @@ struct proc {
 
   int prior_val;               // Priority value [0 - 31], 0: highest, 31: lowest.
   int tickets;            // ticket array
-
-  int T_start;
-  int T_finish;
 };
 
 // Process memory is laid out contiguously, low addresses first:

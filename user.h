@@ -29,6 +29,8 @@ void exitTest(int);
 int waitTest(int*);
 int waitpid(int, int*, int);
 int setpriority(int);
+int lotteryscheduler(void);
+int priorityDonate(int);
 
 // ulib.c
 int stat(const char*, struct stat*);
