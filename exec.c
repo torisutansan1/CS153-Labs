@@ -19,8 +19,6 @@ exec(char *path, char **argv)
   pde_t *pgdir, *oldpgdir;
   struct proc *curproc = myproc();
 
-  curproc->T_start = ticks;
-
   begin_op();
 
   if((ip = namei(path)) == 0){
@@ -101,6 +99,9 @@ exec(char *path, char **argv)
   curproc->sz = sz;
   curproc->tf->eip = elf.entry;  // main
   curproc->tf->esp = sp;
+
+  curproc->T_start = ticks;
+  curproc->T_start = ticks;
   switchuvm(curproc);
   freevm(oldpgdir);
   return 0;
@@ -112,5 +113,6 @@ exec(char *path, char **argv)
     iunlockput(ip);
     end_op();
   }
+
   return -1;
 }
