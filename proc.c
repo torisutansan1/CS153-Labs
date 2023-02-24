@@ -743,19 +743,16 @@ setpriority(int prior_val)
 //     // Enable interrupts on this processor.
 //     sti();
 //     // create a random ticket
-//     int randTicket = rand() % maxTickets();
+//     int randTicket = rand() % maxTickets() + 1;
+//     int minTicket;
 //     // Loop over process table looking for process to run.
 //     acquire(&ptable.lock);
 //     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
 //       if(p->state != RUNNABLE)
 //         continue;
-//       bool nTicket = false;
-//       for(int i = 0; i < p->ticket.size(); i++){
-//         if(p->ticket[i] == randTicket){
-//           nTicket = true;
-//         }
-//       }
-//       if(!nTicket){
+//       // this tests if p contains the ticket.
+//       if(p->ticket <= randTicket || randTicket < minTicket ){
+//         minTicket += p->ticket;
 //         continue;
 //         //randTicket; /*create a new rand ticket*/
 //       }
