@@ -597,9 +597,6 @@ exitTest(int status)
   end_op();
   curproc->cwd = 0;
 
-  curproc->T_finish = ticks;
-  cprintf("For this process, the turnaround time is %d", curproc->T_finish - curproc->T_start);
-
   acquire(&ptable.lock);
 
   // Parent might be sleeping in wait().
@@ -617,6 +614,10 @@ exitTest(int status)
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
   curproc->exitSave = status;
+
+  curproc->T_finish = ticks;
+  cprintf("For this process, the turnaround time is %d", curproc->T_finish - curproc->T_start);
+  
   sched();
   panic("zombie exit");
 }
