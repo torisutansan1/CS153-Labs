@@ -716,7 +716,7 @@ setpriority(int prior_val)
   struct proc* p = myproc();
   struct proc* curproc = myproc();
   p->prior_val = prior_val;
-  p->ticket = 3 * prior_val  - 1;
+  //p->ticket = 3 * prior_val  - 1;
   return curproc->prior_val;
 }
 
@@ -747,6 +747,8 @@ setpriority(int prior_val)
 //     // Loop over process table looking for process to run.
 //     acquire(&ptable.lock);
 //     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+//       if(p->state != RUNNABLE)
+//         continue;
 //       bool nTicket = false;
 //       for(int i = 0; i < p->ticket.size(); i++){
 //         if(p->ticket[i] == randTicket){
@@ -757,8 +759,6 @@ setpriority(int prior_val)
 //         continue;
 //         //randTicket; /*create a new rand ticket*/
 //       }
-//       if(p->state != RUNNABLE)
-//         continue;
 
 //       // Switch to chosen process.  It is the process's job
 //       // to release ptable.lock and then reacquire it
