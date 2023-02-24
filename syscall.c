@@ -108,6 +108,7 @@ extern int sys_waitTest(void);// J.C.
 extern int sys_waitpid(void);// J.C.
 extern int sys_exitTest(void);
 extern int sys_setpriority(void); // T.C.
+extern int sys_lotteryscheduler(void);
 extern int sys_priorityDonate(void);
 
 static int (*syscalls[])(void) = {
@@ -137,6 +138,7 @@ static int (*syscalls[])(void) = {
 [SYS_waitpid]    sys_waitpid, // J.C.
 [SYS_exitTest]    sys_exitTest, //J.C.
 [SYS_setpriority] sys_setpriority, // T.C.
+[SYS_lotteryscheduler] sys_lotteryscheduler,
 [SYS_priorityDonate] sys_priorityDonate,
 };
 
