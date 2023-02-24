@@ -597,9 +597,6 @@ exitTest(int status)
   end_op();
   curproc->cwd = 0;
 
-  curproc->T_finish = ticks;
-  cprintf("\n For this process, the turnaround time is %d \n", curproc->T_finish - curproc->T_start);
-
   acquire(&ptable.lock);
 
   // Parent might be sleeping in wait().
@@ -810,8 +807,11 @@ priorityDonate(int pid){
       if(p->pid != pid){
          continue;
       }
+      // cprintf("curPID: %d priority before: %d and priority val to be changed to %d\n",curproc->pid, curproc->prior_val, p->prior_val);
       int val = curproc->prior_val;
       curproc->prior_val = p->prior_val;
       p->prior_val = val;
+      yield();
+      // cprintf("curPID: %d priority val of curproc: %d\n",curproc->pid,curproc->prior_val);
   }
 }
