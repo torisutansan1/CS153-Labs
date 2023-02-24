@@ -597,6 +597,9 @@ exitTest(int status)
   end_op();
   curproc->cwd = 0;
 
+  curproc->T_finish = ticks;
+  cprintf("\n For this process, the turnaround time is %d \n", curproc->T_finish - curproc->T_start);
+
   acquire(&ptable.lock);
 
   // Parent might be sleeping in wait().
