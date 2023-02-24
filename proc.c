@@ -327,6 +327,7 @@ scheduler(void)
 {
   struct proc *p;
   struct cpu *c = mycpu();
+
   c->proc = 0;
   
   for(;;)
@@ -367,6 +368,7 @@ scheduler(void)
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
+      p->burstTime = ticks;
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
@@ -616,7 +618,11 @@ exitTest(int status)
   curproc->exitSave = status;
 
   curproc->T_finish = ticks;
-  cprintf("For this process, the turnaround time is %d", curproc->T_finish - curproc->T_start);
+
+  int TAT = curproc->T_finish - curproc->T_start;
+  cprintf("For this process, the turnaround time is %d\n", TAT);
+
+  cprintf("For this process, the waiting time is %d\n\n", curproc->burstTime - TAT);
 
   sched();
 
