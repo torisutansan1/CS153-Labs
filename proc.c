@@ -716,6 +716,7 @@ setpriority(int prior_val)
   struct proc* p = myproc();
   struct proc* curproc = myproc();
   p->prior_val = prior_val;
+  p->ticket = 3 * prior_val  - 1;
   return curproc->prior_val;
 }
 
