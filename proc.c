@@ -327,6 +327,7 @@ scheduler(void)
 {
   struct proc *p;
   struct cpu *c = mycpu();
+
   c->proc = 0;
   
   for(;;)
@@ -367,6 +368,7 @@ scheduler(void)
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
+      p->burstTime = ticks;
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
@@ -614,7 +616,16 @@ exitTest(int status)
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
   curproc->exitSave = status;
+
+  curproc->T_finish = ticks;
+
+  int TAT = curproc->T_finish - curproc->T_start;
+  cprintf("For this process, the turnaround time is %d\n", TAT);
+
+  cprintf("For this process, the waiting time is %d\n\n", curproc->burstTime - TAT);
+
   sched();
+
   panic("zombie exit");
 }
 
@@ -739,6 +750,7 @@ setpriority(int prior_val)
 {
   struct proc* curproc = myproc();
   curproc->prior_val = prior_val;
+  yield();
   return curproc->prior_val;
 }
 

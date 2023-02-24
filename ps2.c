@@ -21,11 +21,15 @@ int PScheduler(void){
 
     int pid, ret_pid, exit_status;
     int i,j,k;
+
+    printf(1, "\n");
   
     printf(1, "Testing the priority scheduler and setpriority system call:\n");
     printf(1, "Assuming that the priorities range between range between 0 to 31\n");
     printf(1, "0 is the highest priority. All processes have a default priority of 10\n");
     printf(1, " - The parent processes will switch to priority 0\n");
+
+    printf(1, "\n");
 
     setpriority(0); // Use your own setpriority interface
     for (i = 0; i < 3; i++)
@@ -51,6 +55,14 @@ int PScheduler(void){
                     // priorityDonate(getpid());
                 }
             }
+<<<<<<< HEAD
+=======
+
+            printf(1, "\n");
+
+            priorityDonate(pid);
+            
+>>>>>>> a168e66cbd8ead2f32b551c211dff63ffa850ee7
             printf(1, " - Child #%d with priority %d has finished! \n", getpid(), 30 - 10 * i);
             exitTest(0);
             //prpid = getpid();
@@ -71,6 +83,7 @@ int PScheduler(void){
         }
         printf(1, " - If processes with highest priority finished first then its correct. \n");
     }
+    printf(1, "\n");
 			
     return 0;
 }
