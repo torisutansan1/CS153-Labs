@@ -617,8 +617,9 @@ exitTest(int status)
 
   curproc->T_finish = ticks;
   cprintf("For this process, the turnaround time is %d", curproc->T_finish - curproc->T_start);
-  
+
   sched();
+
   panic("zombie exit");
 }
 
@@ -743,6 +744,7 @@ setpriority(int prior_val)
 {
   struct proc* curproc = myproc();
   curproc->prior_val = prior_val;
+  yield();
   return curproc->prior_val;
 }
 
