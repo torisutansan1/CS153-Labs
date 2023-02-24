@@ -738,7 +738,7 @@ int
 setpriority(int prior_val)
 {
   struct proc* curproc = myproc();
-  p->prior_val = prior_val;
+  curproc->prior_val = prior_val;
   return curproc->prior_val;
 }
 
