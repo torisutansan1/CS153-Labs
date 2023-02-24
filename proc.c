@@ -367,7 +367,7 @@ scheduler(void)
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
-
+      p->burst++;
       swtch(&(c->scheduler), p->context);
       switchkvm();
 
@@ -614,6 +614,11 @@ exitTest(int status)
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
   curproc->exitSave = status;
+  curproc->t_end = ticks;
+  int turnaround = curproc->t_end - curproc->t_start;
+  int waitingtime = turnaround - curproc->burst;
+  cprintf("turn around time: %d, waiting time: %d\n", turnaround, waitingtime );
+  
   sched();
   panic("zombie exit");
 }
@@ -806,7 +811,7 @@ priorityDonate(int pid){
   struct proc *p2 = myproc();
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->pid == pid){
-         p1 = p;
+         p2 = p;
       }
   }
   if(p2 != myproc()){
