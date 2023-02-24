@@ -716,79 +716,79 @@ setpriority(int prior_val)
   struct proc* p = myproc();
   struct proc* curproc = myproc();
   p->prior_val = prior_val;
-  //p->ticket = 3 * prior_val  - 1;
+  p->ticket = 3 * prior_val  - 1;
   return curproc->prior_val;
 }
 
-// int
-// maxTickets(){
-//   int maxTicket;
-//   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-//       if(p != RUNNABLE){
-//         continue;
-//       }
-//       maxTicket += p->ticket;
-//   }
-//   return maxTicket;
-// }
+int
+maxTickets(){
+  int maxTicket;
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p != RUNNABLE){
+        continue;
+      }
+      maxTicket += p->ticket;
+  }
+  return maxTicket;
+}
 
-// void
-// lotteryscheduler(void)
-// {
-//   struct proc *p;
-//   struct cpu *c = mycpu();
-//   c->proc = 0;
-//   srand(tima(null));
-//   for(;;){
-//     // Enable interrupts on this processor.
-//     sti();
-//     // create a random ticket
-//     int randTicket = rand() % maxTickets() + 1;
-//     int minTicket;
-//     // Loop over process table looking for process to run.
-//     acquire(&ptable.lock);
-//     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-//       if(p->state != RUNNABLE)
-//         continue;
-//       // this tests if p contains the ticket.
-//       if(p->ticket <= randTicket || randTicket < minTicket ){
-//         minTicket += p->ticket;
-//         continue;
-//         //randTicket; /*create a new rand ticket*/
-//       }
+void
+lotteryscheduler(void)
+{
+  struct proc *p;
+  struct cpu *c = mycpu();
+  c->proc = 0;
+  srand(tima(null));
+  for(;;){
+    // Enable interrupts on this processor.
+    sti();
+    // create a random ticket
+    int randTicket = rand() % maxTickets() + 1;
+    int minTicket;
+    // Loop over process table looking for process to run.
+    acquire(&ptable.lock);
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p->state != RUNNABLE)
+        continue;
+      // this tests if p contains the ticket.
+      if(p->ticket <= randTicket || randTicket < minTicket ){
+        minTicket += p->ticket;
+        continue;
+        //randTicket; /*create a new rand ticket*/
+      }
 
-//       // Switch to chosen process.  It is the process's job
-//       // to release ptable.lock and then reacquire it
-//       // before jumping back to us.
-//       c->proc = p;
-//       switchuvm(p);
-//       p->state = RUNNING;
+      // Switch to chosen process.  It is the process's job
+      // to release ptable.lock and then reacquire it
+      // before jumping back to us.
+      c->proc = p;
+      switchuvm(p);
+      p->state = RUNNING;
 
-//       swtch(&(c->scheduler), p->context);
-//       switchkvm();
+      swtch(&(c->scheduler), p->context);
+      switchkvm();
 
-//       // Process is done running for now.
-//       // It should have changed its p->state before coming back.
-//       c->proc = 0;
-//     }
-//     release(&ptable.lock);
+      // Process is done running for now.
+      // It should have changed its p->state before coming back.
+      c->proc = 0;
+    }
+    release(&ptable.lock);
 
-//   }
-// }
+  }
+}
 
-// void
-// priorityDonate(int pid){
-//   struct proc *p1 = myproc();
-//   struct proc *p2 = myproc();
-//   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-//       if(p->pid == pid){
-//          p1 = p;
-//       }
-//   }
-//   if(p2 != myproc()){
-//     int val = p1->prior_val;
-//     p1->prior_val = p2->prior_val;
-//     p2->prior_val = val;
-//     yield();
-//   }
-// }
+void
+priorityDonate(int pid){
+  struct proc *p1 = myproc();
+  struct proc *p2 = myproc();
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p->pid == pid){
+         p1 = p;
+      }
+  }
+  if(p2 != myproc()){
+    int val = p1->prior_val;
+    p1->prior_val = p2->prior_val;
+    p2->prior_val = val;
+    yield();
+  }
+}
