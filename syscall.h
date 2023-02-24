@@ -25,5 +25,5 @@
 #define SYS_waitTest 24
 #define SYS_waitpid 25
 #define SYS_setpriority 26
-// #define SYS_lotteryscheduler 27
-#define SYS_priorityDonate 27
+#define SYS_lotteryscheduler 27
+#define SYS_priorityDonate 28

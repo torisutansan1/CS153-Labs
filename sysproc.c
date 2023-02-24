@@ -141,11 +141,11 @@ sys_setpriority(void)
 
   return setpriority(n);
 }
-// int
-// sys_lotteryscheduler(void){
-//   lotteryscheduler();
-//   return 0;
-// }
+int
+sys_lotteryscheduler(void){
+  lotteryscheduler();
+  return 0;
+}
 
 int
 sys_priorityDonate(void){
