@@ -368,7 +368,7 @@ scheduler(void)
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
-      p->burstTime = ticks;
+      p->burstTime += 1;
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
