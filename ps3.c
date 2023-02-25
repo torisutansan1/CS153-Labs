@@ -19,8 +19,11 @@ int PScheduler(void){
     // 0 is the highest priority. All processes have a default priority of 10
     // You can use your own priority range/value setup
 
+    #define PS
+
     int pid, ret_pid, exit_status;
     int i,j,k;
+    int prpid = getpid();
 
     printf(1, "\n");
   

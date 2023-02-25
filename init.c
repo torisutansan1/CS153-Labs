@@ -19,6 +19,11 @@ main(void)
   dup(0);  // stdout
   dup(0);  // stderr
 
+  #ifndef LOTTERY
+  #ifndef PS
+  #endif
+  #endif
+
   for(;;){
     printf(1, "init: starting sh\n");
     pid = fork();

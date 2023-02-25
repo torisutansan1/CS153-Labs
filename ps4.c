@@ -13,12 +13,12 @@ int main(int argc, char *argv[])
     return 0;
 }    
       
-int PScheduler(void){
-		 
+int PScheduler(void)
+{
     // Use this part to test the priority scheduler. Assuming that the priorities range between range between 0 to 31
     // 0 is the highest priority. All processes have a default priority of 10
     // You can use your own priority range/value setup
-
+    #define LOTTERY
     int pid, ret_pid, exit_status;
     int i,j,k;
 
@@ -32,37 +32,29 @@ int PScheduler(void){
     printf(1, "\n");
 
     setpriority(0); // Use your own setpriority interface
+
     for (i = 0; i < 3; i++)
     {
 	pid = fork();
 	if (pid > 0) { continue; } 
     else if ( pid == 0) 
     {
-            //printf(1,"prev pid is %d\n", prpid);
             printf(1, " - Hello! this is child# %d and I will change my priority to %d \n", getpid(), 60 - 20 * i);
             setpriority(30 - 10 * i); // Use your own setpriority interface
 
-            // priorityDonate(getpid()+1);
-            // if(i == 2){
-            //     priorityDonate(getpid()-1);
-            // }
             for (j = 0; j < 50000; j++) 
             {
                 asm("nop");
                 for(k = 0; k < 10000; k++) 
                 {
                     asm("nop"); 
-                    // priorityDonate(getpid());
                 }
             }
 
             printf(1, "\n");
-
-            //priorityDonate(pid);
             
             printf(1, " - Child #%d with priority %d has finished! \n", getpid(), 30 - 10 * i);
             exitTest(0);
-            //prpid = getpid();
         } 
         else 
         {
