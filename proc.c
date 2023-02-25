@@ -622,7 +622,7 @@ exitTest(int status)
   int TAT = curproc->T_finish - curproc->T_start;
   cprintf("For this process, the turnaround time is %d\n", TAT);
 
-  cprintf("For this process, the waiting time is %d\n\n", curproc->burstTime - TAT);
+  cprintf("For this process, the waiting time is %d\n\n", TAT - curproc->burstTime);
 
   sched();
 
