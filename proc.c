@@ -819,8 +819,11 @@ priorityDonate(int pid){
       if(p->pid != pid){
          continue;
       }
+      // cprintf("curPID: %d priority before: %d and priority val to be changed to %d\n",curproc->pid, curproc->prior_val, p->prior_val);
       int val = curproc->prior_val;
       curproc->prior_val = p->prior_val;
       p->prior_val = val;
+      yield();
+      // cprintf("curPID: %d priority val of curproc: %d\n",curproc->pid,curproc->prior_val);
   }
 }
