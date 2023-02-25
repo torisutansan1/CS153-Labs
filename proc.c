@@ -368,7 +368,6 @@ scheduler(void)
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
-      p->burstTime = ticks;
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
@@ -640,7 +639,9 @@ waitTest(int* node)
   for(;;){
     // Scan through table looking for exited children.
     havekids = 0;
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+    {
+      p->burstTime = ticks;
 
       if(p->parent != curproc)
         continue;
@@ -660,6 +661,7 @@ waitTest(int* node)
         p->name[0] = 0;
         p->killed = 0;
         p->state = UNUSED;
+
         release(&ptable.lock);
         return pid;
       }
