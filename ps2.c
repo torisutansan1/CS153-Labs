@@ -55,14 +55,11 @@ int PScheduler(void){
                     // priorityDonate(getpid());
                 }
             }
-<<<<<<< HEAD
-=======
 
             printf(1, "\n");
 
-            priorityDonate(pid);
+            //priorityDonate(pid);
             
->>>>>>> 670509c1369994ad3e3ef968d0fc385b08c95dae
             printf(1, " - Child #%d with priority %d has finished! \n", getpid(), 30 - 10 * i);
             exitTest(0);
             //prpid = getpid();

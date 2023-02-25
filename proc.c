@@ -367,6 +367,7 @@ scheduler(void)
 
       c->proc = p;
       switchuvm(p);
+
       p->state = RUNNING;
       p->burstTime += 1;
 
@@ -620,6 +621,7 @@ exitTest(int status)
   curproc->T_finish = ticks;
 
   int TAT = curproc->T_finish - curproc->T_start;
+  
   cprintf("For this process, the turnaround time is %d\n", TAT);
 
   cprintf("For this process, the waiting time is %d\n\n", TAT - curproc->burstTime);
@@ -642,7 +644,6 @@ waitTest(int* node)
     havekids = 0;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
     {
-      p->burstTime = ticks;
 
       if(p->parent != curproc)
         continue;
