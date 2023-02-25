@@ -19,8 +19,13 @@ main(void)
   dup(0);  // stdout
   dup(0);  // stderr
 
-  #ifndef LOTTERY
-  #ifndef PS
+  #define PS
+
+  #ifdef LOTTERY
+  printf(1, "Lottery\n");
+  #else
+  #ifdef PS
+  printf(1, "PS\n");
   #endif
   #endif
 

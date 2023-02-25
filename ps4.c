@@ -1,6 +1,8 @@
 #include "types.h"
 #include "user.h"
 
+#define LOTTERY
+
 int PScheduler(void);
 
 int main(int argc, char *argv[])
@@ -18,7 +20,6 @@ int PScheduler(void)
     // Use this part to test the priority scheduler. Assuming that the priorities range between range between 0 to 31
     // 0 is the highest priority. All processes have a default priority of 10
     // You can use your own priority range/value setup
-    #define LOTTERY
     int pid, ret_pid, exit_status;
     int i,j,k;
 
