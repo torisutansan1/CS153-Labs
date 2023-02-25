@@ -730,7 +730,7 @@ waitpid(int pid, int* node, int options)
   }
 }
 
-unsigned long int next = 1; 
+unsigned long int next = 100921; 
 
 int rand(void) // RAND_MAX assumed to be 32767 
 { 
