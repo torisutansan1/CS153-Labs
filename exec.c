@@ -101,7 +101,6 @@ exec(char *path, char **argv)
   curproc->tf->esp = sp;
 
   curproc->T_start = ticks;
-  curproc->T_start = ticks;
   switchuvm(curproc);
   freevm(oldpgdir);
   return 0;
