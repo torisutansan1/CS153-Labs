@@ -41,7 +41,7 @@ int PScheduler(void){
     else if ( pid == 0) 
     {
             //printf(1,"prev pid is %d\n", prpid);
-            printf(1, " - Hello! this is child# %d and I will change my priority to %d \n", getpid(), 60 - 20 * i);
+            printf(1, " - Hello! this is child# %d and I will change my priority to %d \n", getpid(), 30 - 10 * i);
             setpriority(30 - 10 * i); // Use your own setpriority interface
 
             // priorityDonate(getpid()+1);
