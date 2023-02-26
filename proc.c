@@ -414,7 +414,7 @@ scheduler(void)
   struct cpu *c = mycpu();
 
   c->proc = 0;
-
+  int min = 0;
   for(;;)
   {
     // Enable interrupts on this processor.
@@ -431,8 +431,9 @@ scheduler(void)
         continue;
       
       // this tests if p contains the ticket.
-      if(p->prior_val <= randTicket && randTicket > 0)
+      if(p->prior_val > randTicket && randTicket > min)
       {
+        min += p->prior_val;
         continue;
       } // If priorVal is 6, they have 6 tickets. 1, 2, 3, 4, 5, 6
 
