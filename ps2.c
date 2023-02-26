@@ -10,12 +10,13 @@ int main(int argc, char *argv[])
     
     PScheduler();
 
-    exitTest(0);
+    exit();
 
     return 0;
 }    
       
-int PScheduler(void){
+int PScheduler()
+{
 		 
     // Use this part to test the priority scheduler. Assuming that the priorities range between range between 0 to 31
     // 0 is the highest priority. All processes have a default priority of 10
@@ -45,7 +46,6 @@ int PScheduler(void){
 
             for (j = 0; j < 50000; j++) 
             {
-                asm("nop");
                 for(k = 0; k < 10000; k++) 
                 {
                     asm("nop");

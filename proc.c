@@ -362,7 +362,7 @@ scheduler(void)
       // before jumping back to us.
       if (p->prior_val != high) 
       { 
-        if (p->prior_val % 31 != 0)
+        if (p->prior_val != 0 && p->prior_val != 32)
         {
           //p->prior_val--;
         }
@@ -423,7 +423,7 @@ scheduler(void)
       // before jumping back to us.
       if (p->prior_val != high) 
       { 
-        if (p->prior_val % 31 != 0)
+        if (p->prior_val != 0 && p->prior_val != 32)
         {
           p->prior_val--;
         }
