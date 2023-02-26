@@ -23,7 +23,7 @@ int PScheduler(void){
 
     int pid, ret_pid, exit_status;
     int i,j,k;
-    int prpid = 0;
+    //int prpid = 0;
 
     printf(1, "\n");
   
@@ -35,20 +35,23 @@ int PScheduler(void){
     printf(1, "\n");
 
     setpriority(0); // Use your own setpriority interface
+
     for (i = 0; i < 3; i++)
     {
 	pid = fork();
 	if (pid > 0) { continue; } 
     else if (pid == 0) 
     {
-            printf(1, " Child: %d Priority: %d \n", getpid(), 30 - 10 * i);
+            printf(1, " PID: %d Priority: %d \n\n", getpid(), 30 - 10 * i);
             setpriority(30 - 10 * i); // Use your own setpriority interface
 
-            priorityDonate(pid);
+            //priorityDonate(getpid());
+
             if(i == 2)
             {
-                priorityDonate(pid);
-            }
+                priorityDonate(getpid() - 2); // Let's donate PID 4 to PID 5
+            } // We are also testing aging of priority. Both 20 and 30 will decrease to 15 and 25
+
             for (j = 0; j < 50000; j++) 
             {
                 asm("nop");
@@ -59,14 +62,14 @@ int PScheduler(void){
                 }
             }
 
+            //priorityDonate(getpid());
+
             printf(1, "\n");
-
-            priorityDonate(pid);
             
-            printf(1, "Child: %d Priority: %d finished \n", getpid(), 30 - 10 * i);
+            printf(1, "PID %d finished\n", getpid());
 
-            printf(1,"Prev PID is %d\n", prpid);
-            prpid = getpid();
+            //prpid = getpid() - 1;
+            //printf(1,"Prev PID is %d\n", prpid);
 
             exitTest(0);
         } 
