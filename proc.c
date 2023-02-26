@@ -431,7 +431,7 @@ scheduler(void)
         continue;
       
       // this tests if p contains the ticket.
-      if(p->prior_val > randTicket && randTicket > min)
+      if(p->prior_val <= randTicket && randTicket > min)
       {
         min += p->prior_val;
         continue;
