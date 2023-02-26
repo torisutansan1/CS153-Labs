@@ -345,7 +345,7 @@ void srand(unsigned int seed)
 void
 scheduler(void)
 {
-  #define LOTTERY
+  #define PS
 
   #ifdef PS
 
@@ -700,9 +700,9 @@ exitTest(int status)
 
   int TAT = curproc->T_finish - curproc->T_start;
 
-  cprintf("For this process, the turnaround time is %d\n", TAT);
+  cprintf("TAT: %d\n", TAT);
 
-  cprintf("For this process, the waiting time is %d\n\n", TAT - curproc->burstTime);
+  cprintf("Wait Time: %d\n\n", TAT - curproc->burstTime);
 
   #endif
 
@@ -826,18 +826,25 @@ void
 lotteryscheduler(void) {}
 
 void
-priorityDonate(int pid){
+priorityDonate(int pid)
+{
   struct proc *p;
   struct proc *curproc = myproc();
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
       if(p->pid != pid){
          continue;
       }
       // cprintf("curPID: %d priority before: %d and priority val to be changed to %d\n",curproc->pid, curproc->prior_val, p->prior_val);
+
       int val = curproc->prior_val;
       curproc->prior_val = p->prior_val;
       p->prior_val = val;
+
       yield();
+
+
       // cprintf("curPID: %d priority val of curproc: %d\n",curproc->pid,curproc->prior_val);
   }
 }
