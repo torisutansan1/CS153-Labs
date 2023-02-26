@@ -40,7 +40,7 @@ int PScheduler(void)
 	if (pid > 0) { continue; } 
     else if ( pid == 0) 
     {
-            printf(1, " Child: %d Ticket #: %d", getpid(), 6 - 1 * i);
+            printf(1, " Child: %d Tickets: %d", getpid(), 6 - 1 * i);
             printf(1, "\n");
             setpriority(6 - 1 * i); // Use your own setpriority interface
 
