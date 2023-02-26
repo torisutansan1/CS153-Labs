@@ -425,18 +425,22 @@ scheduler(void)
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
     {
       //randTicket
-      int randTicket = (ticks * 62 * 37 * 33 * 21) % 62;
+      int randTicket = (p->T_finish + p->burstTime + ticks * 7) % 7;
 
       if(p->state != RUNNABLE)
         continue;
       
       // this tests if p contains the ticket.
-      if(p->prior_val > randTicket && randTicket > min)
+      if(p->prior_val >= randTicket && randTicket > min)
       {
         min += p->prior_val;
         continue;
       } // If priorVal is 6, they have 6 tickets. 1, 2, 3, 4, 5, 6
 
+      if(randTicket < min){
+        min += p->prior_val;
+        continue;
+      }
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
