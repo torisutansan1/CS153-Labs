@@ -425,13 +425,13 @@ scheduler(void)
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
     {
       //randTicket
-      int randTicket = (ticks * 7) % 7;
+      int randTicket = (ticks * 6) % 7;
 
       if(p->state != RUNNABLE)
         continue;
       
       // this tests if p contains the ticket.
-      if(p->prior_val <= randTicket && randTicket > 0)
+      if(p->prior_val >= randTicket && randTicket > 0)
       {
         continue;
       } // If priorVal is 6, they have 6 tickets. 1, 2, 3, 4, 5, 6
