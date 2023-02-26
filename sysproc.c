@@ -142,9 +142,10 @@ sys_setpriority(void)
   return setpriority(n);
 }
 int
-sys_lotteryscheduler(void){
-  lotteryscheduler();
-  return 0;
+
+sys_aging(void)
+{
+  return aging();
 }
 
 int

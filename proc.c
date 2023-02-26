@@ -313,26 +313,6 @@ wait(void)
   }
 }
 
-int
-maxTickets()
-{
-  struct proc *p;
-  int maxTicket = 0;
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-  {
-      if(p->state != RUNNABLE){
-        continue;
-      }
-      maxTicket += p->ticket;
-  }
-  return maxTicket;
-}
-
-void srand(unsigned int seed) 
-{ 
-    seed = seed; 
-} 
-
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
@@ -345,7 +325,7 @@ void srand(unsigned int seed)
 void
 scheduler(void)
 {
-  #define PS
+  #define AGING
 
   #ifdef PS
 
@@ -408,7 +388,7 @@ scheduler(void)
 
   #else
 
-  #ifdef aging
+  #ifdef AGING
 
   struct proc *p;
   struct cpu *c = mycpu();
@@ -888,8 +868,12 @@ setpriority(int prior_val)
   return curproc->prior_val;
 }
 
-void
-lotteryscheduler(void) { }
+int
+aging() 
+{ 
+  struct proc* curproc = myproc();
+  return curproc->prior_val;
+}
 
 void
 priorityDonate(int pid)

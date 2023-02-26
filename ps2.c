@@ -1,7 +1,7 @@
 #include "types.h"
 #include "user.h"
 
-#define PS
+#define AGING
 
 int PScheduler(void);
 
@@ -54,7 +54,7 @@ int PScheduler(void){
 
             printf(1, "\n");
             
-            printf(1, " - Child #%d with priority %d has finished! \n", getpid(), 30 - 10 * i);
+            printf(1, " - Child #%d with priority %d has finished! \n", getpid(), aging());
             exitTest(0);
         } 
         else 

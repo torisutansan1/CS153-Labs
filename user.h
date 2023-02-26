@@ -29,7 +29,7 @@ void exitTest(int);
 int waitTest(int*);
 int waitpid(int, int*, int);
 int setpriority(int);
-int lotteryscheduler(void);
+int aging(void);
 int priorityDonate(int);
 
 // ulib.c
