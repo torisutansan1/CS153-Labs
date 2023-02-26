@@ -425,7 +425,7 @@ scheduler(void)
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
     {
       //randTicket
-      int randTicket = (p->T_finish + p->burstTime + ticks * 7) % 7;
+      int randTicket = (ticks * 62 * 37 * 33 * 21) % 62;
 
       if(p->state != RUNNABLE)
         continue;
