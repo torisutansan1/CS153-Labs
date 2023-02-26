@@ -40,31 +40,22 @@ int PScheduler(void){
 	if (pid > 0) { continue; } 
     else if ( pid == 0) 
     {
-            //printf(1,"prev pid is %d\n", prpid);
             printf(1, " - Hello! this is child# %d and I will change my priority to %d \n", getpid(), 30 - 10 * i);
             setpriority(30 - 10 * i); // Use your own setpriority interface
 
-            // priorityDonate(getpid()+1);
-            // if(i == 2){
-            //     priorityDonate(getpid()-1);
-            // }
             for (j = 0; j < 50000; j++) 
             {
                 asm("nop");
                 for(k = 0; k < 10000; k++) 
                 {
-                    asm("nop"); 
-                    // priorityDonate(getpid());
+                    asm("nop");
                 }
             }
 
             printf(1, "\n");
-
-            //priorityDonate(pid);
             
             printf(1, " - Child #%d with priority %d has finished! \n", getpid(), 30 - 10 * i);
             exitTest(0);
-            //prpid = getpid();
         } 
         else 
         {

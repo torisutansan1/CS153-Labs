@@ -345,9 +345,70 @@ void srand(unsigned int seed)
 void
 scheduler(void)
 {
-  #define LOTTERY
+  #define PS
 
   #ifdef PS
+
+  struct proc *p;
+  struct cpu *c = mycpu();
+
+  c->proc = 0;
+  
+  for(;;)
+  {
+    // Enable interrupts on this processor.
+    sti();
+
+    // Loop over process table looking for process to run.
+    // Lowest priority
+    int high = 31;
+
+    acquire(&ptable.lock);
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+    {
+      if (p->state != RUNNABLE) { continue; }
+
+      if (p->prior_val < high)
+      {
+        high = p->prior_val;
+      }
+    }
+
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+    {
+      if (p->state != RUNNABLE) { continue; }
+      // Switch to chosen process.  It is the process's job
+      // to release ptable.lock and then reacquire it
+      // before jumping back to us.
+      if (p->prior_val != high) 
+      { 
+        if (p->prior_val % 31 != 0)
+        {
+          //p->prior_val--;
+        }
+        continue;  
+      }
+
+      c->proc = p;
+      switchuvm(p);
+
+      p->state = RUNNING;
+      p->burstTime += 1;
+
+      swtch(&(c->scheduler), p->context);
+      switchkvm();
+
+      // Process is done running for now.
+      // It should have changed its p->state before coming back.
+      c->proc = 0;
+      //p->prior_val++;
+    }
+    release(&ptable.lock);
+  }
+
+  #else
+
+  #ifdef aging
 
   struct proc *p;
   struct cpu *c = mycpu();
@@ -459,6 +520,7 @@ scheduler(void)
     release(&ptable.lock);
   }
 
+  #endif
   #endif
   #endif
 }
@@ -704,9 +766,9 @@ exitTest(int status)
 
   int TAT = curproc->T_finish - curproc->T_start;
 
-  cprintf("For this process, the turnaround time is %d\n", TAT);
+  cprintf("TAT: %d\n", TAT);
 
-  cprintf("For this process, the waiting time is %d\n\n", TAT - curproc->burstTime);
+  cprintf("Wait Time: %d\n\n", TAT - curproc->burstTime);
 
   #endif
 
@@ -827,21 +889,30 @@ setpriority(int prior_val)
 }
 
 void
-lotteryscheduler(void) {}
+lotteryscheduler(void) { }
 
 void
-priorityDonate(int pid){
+priorityDonate(int pid)
+{
   struct proc *p;
   struct proc *curproc = myproc();
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->pid != pid){
+
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
+      if(p->pid != pid)
+      {
          continue;
       }
-      // cprintf("curPID: %d priority before: %d and priority val to be changed to %d\n",curproc->pid, curproc->prior_val, p->prior_val);
+      cprintf("PID: %d Prev: %d\n", curproc->pid, curproc->prior_val);
+      cprintf("PID: %d Prev: %d\n", p->pid, p->prior_val);
+
       int val = curproc->prior_val;
       curproc->prior_val = p->prior_val;
       p->prior_val = val;
+
+      cprintf("PID: %d New: %d\n", curproc->pid, curproc->prior_val);
+      cprintf("PID: %d New: %d\n", p->pid, p->prior_val);
+
       yield();
-      // cprintf("curPID: %d priority val of curproc: %d\n",curproc->pid,curproc->prior_val);
   }
 }
