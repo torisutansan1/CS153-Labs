@@ -369,22 +369,19 @@ scheduler(void)
         continue;  
       }
 
-      if (p != 0) // Processor Affinity. Keeps track of the core not running.
-      {
-        c->proc = p;
-        switchuvm(p);
+      c->proc = p;
+      switchuvm(p);
 
-        p->state = RUNNING;
-        p->burstTime += 1;
+      p->state = RUNNING;
+      p->burstTime += 1;
 
-        swtch(&(c->scheduler), p->context);
-        switchkvm();
+      swtch(&(c->scheduler), p->context);
+      switchkvm();
 
-        // Process is done running for now.
-        // It should have changed its p->state before coming back.
-        c->proc = 0;
-        //p->prior_val++;
-      }
+      // Process is done running for now.
+      // It should have changed its p->state before coming back.
+      c->proc = 0;
+      //p->prior_val++;
     }
     release(&ptable.lock);
   }
